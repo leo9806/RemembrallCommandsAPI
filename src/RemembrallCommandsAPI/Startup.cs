@@ -10,6 +10,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Npgsql;
 
 namespace RemembrallCommandsAPI {
     public class Startup {
@@ -20,9 +21,15 @@ namespace RemembrallCommandsAPI {
             Configuration = configuration;
 
         public void ConfigureServices (IServiceCollection services) {
+            var builder = new NpgsqlConnectionStringBuilder ();
+            builder.ConnectionString =
+                Configuration.GetConnectionString ("PostgreSqlConnection");
+            builder.Username = Configuration["UserID"];
+            builder.Password = Configuration["Password"];
+
             // register our CommandContext class as a solution-wide DBContext and we point it to the
             // connection string
-            services.AddDbContext<CommandContext> (opt => opt.UseNpgsql (Configuration.GetConnectionString ("PostgreSqlConnection")));
+            services.AddDbContext<CommandContext> (opt => opt.UseNpgsql ((builder.ConnectionString)));
 
             services.AddControllers ();
         }
