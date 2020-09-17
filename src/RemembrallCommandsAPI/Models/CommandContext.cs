@@ -1,6 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 
-namespace CommandAPI.Models {
+namespace RemembrallCommandsAPI.Models {
     public class CommandContext : DbContext {
         public CommandContext (DbContextOptions<CommandContext> options):
             base (options) { }
